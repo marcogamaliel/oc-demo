@@ -7,6 +7,7 @@ const pages = [
   {label: 'Ordenes de Compra', url: '/ocs'},
   {label: 'Productos', url: '/products'},
   {label: 'Clientes', url: '/clients'},
+  {label: 'Configuración', url: '/settings'},
 ];
 const settings = [
   {label: 'Logout', action: () => logout()}

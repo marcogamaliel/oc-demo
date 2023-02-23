@@ -15,7 +15,7 @@ export function OCsView() {
   const navigate = useNavigate()
   const {isLoading, isError, data: ocs} = useQuery<OC[]>('ocs', OCsRepository.findAll)
   const actions: ActionProps[] = []
-  if(checkRoles(['seller'])) actions.push({
+  if(checkRoles(['seller', 'admin'])) actions.push({
     key: 'create-oc',
     label: 'Crear OC',
     onClick: () => navigate('/ocs/create')

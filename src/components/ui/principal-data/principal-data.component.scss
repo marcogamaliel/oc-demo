@@ -1,0 +1,27 @@
+.principal-data {
+    display: flex;
+    flex-direction: row;
+    gap: 1rem;
+    justify-content: space-between;
+    align-items: center;
+
+    & > div:first-child {
+        display: flex;
+        flex-direction: row;
+        gap: 1rem;
+        align-items: center;
+        padding: 2rem 0;
+    }
+
+    h1, h2 {
+        margin: 0;
+        line-height: 1;
+    }
+    h1 {
+        font-size: 2.5rem;
+    }
+    a {
+        text-decoration: none;
+        color: white;
+    }
+}

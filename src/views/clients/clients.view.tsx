@@ -36,7 +36,7 @@ export function ClientsView() {
               <ListItem
               disablePadding
               onClick={() => {
-                  if(checkRoles(['rrhh'])) navigate(`/clients/${user.dni}`)
+                  if(checkRoles(['admin'])) navigate(`/clients/${user.dni}`)
               }}
               >
                 <ListItemButton>

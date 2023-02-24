@@ -1,22 +1,30 @@
 import { Button, TextField } from "@mui/material";
 import { Box } from "@mui/system";
+import { useEffect } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { useNavigate } from "react-router";
-import { RetryConfig } from "../../../domain/models/retry-config.model";
+import { SyncConf } from "../../../domain/models/sync-config.model";
 
 type SyncConfigFormProps = {
-  onSubmit: (data: RetryConfig) => void;
+  onSubmit: (data: SyncConf) => void;
+  defaultValues?: SyncConf;
 }
 
 export function SyncConfigForm(props: SyncConfigFormProps) {
   const navigate = useNavigate()
-  const { handleSubmit, reset, control, setValue } = useForm<RetryConfig>({
+  const { handleSubmit, reset, control, setValue } = useForm<SyncConf>({
     defaultValues: {
         retry: 0,
         period: 0,
         retryDelay: 0,
     }
   });
+
+  useEffect(() => {
+    if (props.defaultValues) {
+      reset(props.defaultValues)
+    }
+  }, [props.defaultValues])
   
   return (
     <Box

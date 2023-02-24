@@ -95,7 +95,7 @@ export function AppBarComponent() {
               >
                 {page.label}
               </Button>
-            ): <></>)}
+            ): undefined).filter((page) => page !== undefined)}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

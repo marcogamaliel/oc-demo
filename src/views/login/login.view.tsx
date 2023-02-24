@@ -3,19 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { Credential } from "../../domain/models/credential.model";
 import { UsersRepository } from "../../domain/repositories/users.repository";
 import { Controller, useForm } from 'react-hook-form';
-import { Alert, Button, TextField } from '@mui/material';
+import { Alert, Button, CircularProgress, TextField } from '@mui/material';
 import { useState } from 'react';
 
 export function LoginView() {
     const [errorMsg, setErrorMsg] = useState<string|undefined>(undefined);
-    const { control, register, handleSubmit, formState: { errors } } = useForm<Credential>({defaultValues: {email: '', password: ''}});
+    const [isLoading, setIsLoading] = useState<boolean>(false);
+    const { control, handleSubmit, formState: { errors } } = useForm<Credential>({defaultValues: {email: '', password: ''}});
     const navigate = useNavigate();
     const onSubmit = (credential: Credential) => {
-        console.log('login', credential)
+        setIsLoading(true);
         UsersRepository.login(credential).then(() => {
             navigate('/');
         }).catch((error) => {
             setErrorMsg(error.message);
+        }).finally(() => {
+            setIsLoading(false);
         })
     }
 
@@ -38,6 +41,7 @@ export function LoginView() {
                         render={({ field }) => <TextField {...field} label="Password" variant='standard' type="password" fullWidth  error={!!errors.password} helperText={errors.password?.message}/>}
                         rules={{ required: 'La contraseña es requerida' }}
                     />
+                    {isLoading && <CircularProgress />}
                     {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
                     <Button variant="contained" type="submit">Login</Button>
                 </form>

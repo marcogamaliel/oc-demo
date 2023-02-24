@@ -1,9 +1,10 @@
 import { SyncConfigForm } from "../../components/forms/sync-config-form/sync-config.form";
 import { PrincipalDataComponent } from "../../components/ui/principal-data/principal-data.component";
 import { View } from "../../components/ui/view.component";
+import { guardRoles } from "../../services/authorization/authorization.service";
 
 export function SettingsView() {
-
+  guardRoles(['admin'])
   const onSubmit = (data: any) => {
     console.log(data)
   }

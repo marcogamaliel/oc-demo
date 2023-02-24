@@ -8,8 +8,10 @@ import { OC } from "../../../domain/models/oc.model"
 import { OCsRepository } from "../../../domain/repositories/ocs.repository"
 import { formatDate, priceFormat } from "../../../helpers/format.helper"
 import { getChipOCStatus, getChipOCSync } from '../../../helpers/oc.helper'
+import { guardRoles } from '../../../services/authorization/authorization.service'
 
 export function OCView() {
+    guardRoles(['admin', 'seller'])
     const {id} = useParams<{id: string}>()
     const {isLoading, isError, data: oc} = useQuery<OC | undefined>('oc', () => OCsRepository.findById(id))
   

@@ -4,6 +4,7 @@ import { PrincipalDataComponent } from "../../../components/ui/principal-data/pr
 import { OC } from "../../../domain/models/oc.model";
 import { OCsRepository } from "../../../domain/repositories/ocs.repository";
 import { View } from "../../../components/ui/view.component";
+import { guardRoles } from "../../../services/authorization/authorization.service";
 
 const defaultOC: OC = {
   id: "",
@@ -14,6 +15,7 @@ const defaultOC: OC = {
 };
 
 export function CreateOCView() {
+  guardRoles(["seller"])
   const navigate = useNavigate();
   const save = (oc: OC) => {
     OCsRepository.save(oc).then(() => {

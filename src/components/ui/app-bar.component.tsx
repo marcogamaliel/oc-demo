@@ -1,13 +1,14 @@
 import { AppBar, Avatar, Box, Button, Container, Icon, IconButton, Menu, MenuItem, Toolbar, Tooltip, Typography } from "@mui/material";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { logout } from "../../services/authorization/authorization.service";
+import { Role } from "../../domain/models/types/roles.type";
+import { checkRoles, logout } from "../../services/authorization/authorization.service";
 
 const pages = [
-  {label: 'Ordenes de Compra', url: '/ocs'},
-  {label: 'Productos', url: '/products'},
-  {label: 'Clientes', url: '/clients'},
-  {label: 'Configuración', url: '/settings'},
+  {label: 'Ordenes de Compra', url: '/ocs', roles: ['seller', 'admin']},
+  {label: 'Productos', url: '/products', roles: ['seller']},
+  {label: 'Clientes', url: '/clients', roles: ['seller']},
+  {label: 'Configuración', url: '/settings', roles: ['admin']},
 ];
 const settings = [
   {label: 'Logout', action: () => logout()}
@@ -86,7 +87,7 @@ export function AppBarComponent() {
             <img src="https://images.falabella.com/v3/assets/blt34d59f5b52e53f95/blte406c5291b17be06/63a3e08766600623830ace19/logo-sodimac.svg" alt="Sodimac" />
           </Typography>
           <Box sx={{ flexGrow: 1, display: { xs: 'none', md: 'flex' } }}>
-            {pages.map((page) => (
+            {pages.map((page) => checkRoles(page.roles as Role[])? (
               <Button
                 key={page.url}
                 onClick={() => navigate(page.url)}
@@ -94,7 +95,7 @@ export function AppBarComponent() {
               >
                 {page.label}
               </Button>
-            ))}
+            ): <></>)}
           </Box>
 
           <Box sx={{ flexGrow: 0 }}>

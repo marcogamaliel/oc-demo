@@ -3,19 +3,22 @@ import { useNavigate } from "react-router-dom";
 import { Credential } from "../../domain/models/credential.model";
 import { UsersRepository } from "../../domain/repositories/users.repository";
 import { Controller, useForm } from 'react-hook-form';
-import { Button, TextField } from '@mui/material';
+import { Alert, Button, TextField } from '@mui/material';
+import { useState } from 'react';
 
 export function LoginView() {
+    const [errorMsg, setErrorMsg] = useState<string|undefined>(undefined);
+    const { control, register, handleSubmit, formState: { errors } } = useForm<Credential>({defaultValues: {email: '', password: ''}});
     const navigate = useNavigate();
     const onSubmit = (credential: Credential) => {
         console.log('login', credential)
         UsersRepository.login(credential).then(() => {
             navigate('/');
         }).catch((error) => {
-            alert(error)
+            setErrorMsg(error.message);
         })
     }
-    const { control, register, handleSubmit, formState: { errors } } = useForm<Credential>({defaultValues: {email: '', password: ''}});
+
 
     return (
         <div className="login">
@@ -26,13 +29,16 @@ export function LoginView() {
                     <Controller
                         name="email"
                         control={control}
-                        render={({ field }) => <TextField {...field} label="Correo" variant='standard' fullWidth sx={{ color: 'white' }}/>}
+                        render={({ field }) => <TextField {...field} label="Correo" variant='standard' fullWidth sx={{ color: 'white' }} error={!!errors.email} helperText={errors.email?.message}/>}
+                        rules={{ required: 'El correo es requerido' }}
                     />
                     <Controller
                         name="password"
                         control={control}
-                        render={({ field }) => <TextField {...field} label="Password" variant='standard' type="password" fullWidth />}
+                        render={({ field }) => <TextField {...field} label="Password" variant='standard' type="password" fullWidth  error={!!errors.password} helperText={errors.password?.message}/>}
+                        rules={{ required: 'La contraseña es requerida' }}
                     />
+                    {errorMsg && <Alert severity="error">{errorMsg}</Alert>}
                     <Button variant="contained" type="submit">Login</Button>
                 </form>
             </div>

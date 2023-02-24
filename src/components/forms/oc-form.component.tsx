@@ -5,6 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { Client } from "../../domain/models/client.model";
 import { OCItem } from "../../domain/models/oc-item.model";
 import { OC } from "../../domain/models/oc.model";
+import { ClientsRepository } from "../../domain/repositories/clients.repository";
 import { AddProductsComponent } from "./components/add-products.component";
 
 export type OCFormProps = {
@@ -22,6 +23,16 @@ export function OCForm(props: OCFormProps) {
     }
   });
   const [items, setItems] = useState<OCItem[]>([])
+  
+  const findUser = (e: any) => {
+    const dni = e.target.value
+    ClientsRepository.findById(dni).then((client) => {
+      if(client) {
+        setValue('name', client.name)
+        setValue('email', client.email)
+      }
+    })
+  }
 
   const onSubmit = (client: Client) => {
     props.onSubmit({
@@ -45,7 +56,10 @@ export function OCForm(props: OCFormProps) {
         <Controller
           name="dni"
           control={control}
-          render={({ field }) => <TextField {...field} label="Rut" />}
+          render={({ field }) => <TextField {...field} label="Rut" onChange={(...event) => {
+            findUser(...event);
+            field.onChange(...event)
+          }} />}
         />
         <Controller
           name="name"

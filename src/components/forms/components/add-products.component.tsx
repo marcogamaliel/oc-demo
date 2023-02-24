@@ -3,6 +3,8 @@ import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import { OCItem } from "../../../domain/models/oc-item.model";
 import { OC } from "../../../domain/models/oc.model";
+import { Product } from "../../../domain/models/product.model";
+import { ProductsRepository } from "../../../domain/repositories/products.repository";
 import { priceFormat } from "../../../helpers/format.helper";
 
 type addProductProps = {
@@ -20,15 +22,35 @@ export function AddProductsComponent(props: addProductProps) {
   });
 
   const [products, setProducts] = useState<OCItem[]>([]);
+  const [findedProduct, setFindedProduct] = useState<Product | undefined>(undefined);
   const [total, setTotal] = useState(0);
 
-  function addProduct(product: Omit<OCItem, 'price' | 'total'>) {
-    reset()
-    const item = {...product, price: 1000, total: 1000 * product.quantity}
+  function findProduct(e: any) {
+    const id = e.target.value
+    ProductsRepository.findById(id).then((product) => {
+      if(product) {
+        setFindedProduct(product)
+        setValue('name', product.name)
+      }
+    })
+  }
+
+  function addProduct(itemAdded: Omit<OCItem, 'price' | 'total'>) {
+    if(!findedProduct) return
+    const totalItem = findedProduct?.price * itemAdded.quantity
+    const item = {
+      id: findedProduct.id,
+      name: findedProduct.name,
+      quantity: itemAdded.quantity,
+      price: findedProduct?.price,
+      total: totalItem
+    }
     const items = [...products, item];
     setProducts(items);
     props.setProductsItems(items);
-    setTotal(total + 1000 * product.quantity);
+    reset()
+    setTotal(total + totalItem);
+    setFindedProduct(undefined);
   }
 
   return (
@@ -43,7 +65,10 @@ export function AddProductsComponent(props: addProductProps) {
         <Controller
         name="id"
         control={control}
-        render={({ field }) => <TextField {...field} label="Id" />}
+        render={({ field }) => <TextField {...field} label="Id" onChange={(...event) => {
+          findProduct(...event)
+          field.onChange(...event)
+        }}/>}
         />
         <Controller
         name="name"

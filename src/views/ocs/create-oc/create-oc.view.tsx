@@ -5,23 +5,23 @@ import { OC } from "../../../domain/models/oc.model";
 import { OCsRepository } from "../../../domain/repositories/ocs.repository";
 import { View } from "../../../components/ui/view.component";
 import { guardRoles } from "../../../services/authorization/authorization.service";
-
-const defaultOC: OC = {
-  id: "",
-  items: [],
-  total: 0,
-  status: "Pendiente",
-  sync: false,
-};
+import { useQuery } from "react-query";
+import { ClientsRepository } from "../../../domain/repositories/clients.repository";
+import { LinearProgress } from "@mui/material";
 
 export function CreateOCView() {
   guardRoles(["seller"])
   const navigate = useNavigate();
-  const save = (oc: OC) => {
-    OCsRepository.save(oc).then(() => {
+  const {isLoading, isError, error, data: clients} = useQuery('clients', ClientsRepository.findAll)
+  const save = (oc: Pick<OC, 'client' | 'amount'>) => {
+    OCsRepository.save({
+      ...oc,
+      status: 'Pendiente',
+      sync: false
+    }).then(() => {
       navigate(-1)
     });
-    console.log(oc)
+    console.log({oc})
   }
 
   return (
@@ -30,12 +30,13 @@ export function CreateOCView() {
         <PrincipalDataComponent
           title="Nueva OC"
           class="container"
-          icon="person"
+          icon="sell"
           activeBack={true}
         />
+        {isLoading && <LinearProgress className="principal-loading" />}
       </section>
       <div className="container">
-        <OCForm onSubmit={save}/>
+        <OCForm onSubmit={save} clients={clients}/>
       </div>
     </View>
   );

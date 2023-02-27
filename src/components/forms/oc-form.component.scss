@@ -1,0 +1,11 @@
+.inputs-container {
+  display: flex;
+  gap: 1rem;
+
+  & > div:first-child {
+    flex: 4;
+  }
+  & > div:last-child {
+    flex: 1;
+  }
+}

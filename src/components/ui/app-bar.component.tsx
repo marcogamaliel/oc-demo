@@ -6,7 +6,6 @@ import { checkRoles, logout } from "../../services/authorization/authorization.s
 
 const pages = [
   {label: 'Ordenes de Compra', url: '/ocs', roles: ['seller', 'admin']},
-  {label: 'Productos', url: '/products', roles: ['seller']},
   {label: 'Clientes', url: '/clients', roles: ['seller']},
   {label: 'Configuración', url: '/settings', roles: ['admin']},
 ];

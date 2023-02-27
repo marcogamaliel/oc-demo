@@ -5,10 +5,9 @@ import { OCStatus } from "./types/oc-status.type";
 export type OC = {
   id?: string;
   client?: Client;
-  items: OCItem[];
   date?: Date;
   paymentDate?: Date;
-  total: number;
+  amount: number;
   status: OCStatus;
   sync: boolean;
 };

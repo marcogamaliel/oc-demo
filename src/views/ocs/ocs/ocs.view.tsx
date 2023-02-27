@@ -54,7 +54,7 @@ export function OCsView() {
                   </ListItemAvatar>
                   <ListItemText
                     primary={oc.client?.name}
-                    secondary={priceFormat(oc.total)}
+                    secondary={priceFormat(oc.amount)}
                   />
                 </ListItemButton>
               </ListItem>

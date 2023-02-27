@@ -96,9 +96,9 @@ export function AddProductsComponent(props: addProductProps) {
                 </TableRow>
               </TableHead>
               <TableBody>
-                {products.map((product) => (
+                {products.map((product, i) => (
                   <TableRow
-                    key={product.id}
+                    key={`oc-item-${i}`}
                     sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
                   >
                     <TableCell component="th" scope="row">
